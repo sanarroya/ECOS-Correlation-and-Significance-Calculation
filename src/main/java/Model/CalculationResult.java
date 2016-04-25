@@ -5,6 +5,7 @@
  */
 package Model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,8 +16,6 @@ public class CalculationResult {
     
     private double xk;
     private double regressionB1;
-    private double xAverage;
-    private double yAverage;
     private double correlationR;
     private double n;
     private List<ValuePair> values;
@@ -65,34 +64,31 @@ public class CalculationResult {
      *X Average  attribute getter
      * @return X Average value
      */
-    public double getxAverage() {
-        return xAverage;
-    }
-
-    /**
-     * X Average attribute setter
-     * @param xAverage
-     */
-    public void setxAverage(double xAverage) {
-        this.xAverage = xAverage;
+    public double getXAverage() {
+        
+        List<Double> xElements = new ArrayList<>();
+        
+        for(ValuePair value : values) {
+            xElements.add(value.getX());
+        }
+        return StatisticCalculationManager.calculateMean(xElements);
     }
 
     /**
      * Y Average attribute getter
      * @return Y Average value
      */
-    public double getyAverage() {
-        return yAverage;
+    public double getYAverage() {
+        
+        List<Double> yElements = new ArrayList<>();
+        
+        for(ValuePair value : values) {
+            yElements.add(value.getY());
+        }
+        
+        return StatisticCalculationManager.calculateMean(yElements);
     }
-
-    /**
-     *Y Average attribute setter
-     * @param yAverage
-     */
-    public void setyAverage(double yAverage) {
-        this.yAverage = yAverage;
-    }
-
+    
     /**
      * CorrelationR  attribute getter
      * @return CorrelationR value
@@ -154,7 +150,7 @@ public class CalculationResult {
      * @return RegressionB0 value
      */
     public double getRegressionB0() {
-        return this.yAverage - (this.xAverage * this.regressionB1);
+        return this.getYAverage() - (this.getXAverage() * this.regressionB1);
     }
     
     /**
@@ -179,16 +175,21 @@ public class CalculationResult {
     
     public double getRange() {
         
-        IntegralInfo integralInfo = new IntegralInfo(this.n - 2.0, 10.0, 0.0, 0.0, 0.35);
+        IntegralInfo integralInfo = new IntegralInfo(this.n - 2.0, 10.0, 0.0, 0.5, 0.35);
         
         integralInfo = Search.xValue(integralInfo);
         
         double xValue = integralInfo.getIntegralUpperLimit();
         double standardDeviation = StatisticCalculationManager.standardDeviation(this.values);
-        System.out.println("x: " + xValue);
-        System.out.println("Std: " + standardDeviation);
-        System.out.println("third: " + rangeThirdTerm());
         return xValue * standardDeviation * rangeThirdTerm();
+    }
+    
+    public double getUPI() {
+        return this.getYK() + this.getRange();
+    }
+    
+    public double getLPI() {
+        return this.getYK() - this.getRange();
     }
     
     private double calculateIntegralUpperLimit() {
@@ -202,12 +203,12 @@ public class CalculationResult {
     private double rangeThirdTerm() {
         
         double rangeThirdTerm = 1 + (1 / (double) values.size());
-        
-        double numerator = Math.pow((xk - xAverage), 2.0);
+        System.out.println("RANGE THIRD TERM " + this.getXAverage());
+        double numerator = Math.pow((xk - this.getXAverage()), 2.0);
         double enumerator = 0.0;
         
         for(ValuePair value : values) {
-            enumerator += Math.pow(value.getX() - xAverage, 2.0);
+            enumerator += Math.pow(value.getX() - this.getXAverage(), 2.0);
         }
         
         double fraction = numerator / enumerator;

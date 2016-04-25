@@ -101,13 +101,14 @@ public class StatisticCalculationManager {
      */
     public static double standardDeviation(List<ValuePair> values) {
         
-        double standardDeviation = 0.0;
+        double standardDeviation;
         double sumatory = 0.0;
         double size = (double) values.size();
         double firstTerm = 1 / (size - 2);
 
-        List<Double> xElements = new ArrayList<Double>();
-        List<Double> yElements = new ArrayList<Double>();
+        List<Double> xElements = new ArrayList<>();
+        List<Double> yElements = new ArrayList<>();
+        
         for(ValuePair value : values) {
             xElements.add(value.getX());
             yElements.add(value.getY());
@@ -116,9 +117,7 @@ public class StatisticCalculationManager {
         double B0 = calculateMean(yElements) - (calculateMean(xElements) * B1);
               
         sumatory = values.stream().map((value) -> value.getY() - B0 - (B1 * value.getX())).map((base) -> Math.pow(base, 2)).reduce(sumatory, (accumulator, _item) -> accumulator + _item);
-        System.out.println(sumatory);
         standardDeviation = Math.sqrt(firstTerm * sumatory);
-        System.out.println(standardDeviation);
         return standardDeviation;
     }
     
