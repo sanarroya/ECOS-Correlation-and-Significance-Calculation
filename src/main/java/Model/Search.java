@@ -15,43 +15,80 @@ import java.text.DecimalFormatSymbols;
 public class Search {
  
     /**
-     *Search the x value for which the Simpson Integral resolves to a given P 
+     * Search the x value for which the Simpson integral resolves to the given P
+     * 
      * @param integralInfo
      * @return All the integral information with the x value updated
      */
     static public IntegralInfo xValue(IntegralInfo integralInfo) {
-			
-	return integralInfo;
-    }
+		
+	boolean mustAdjustX = true;
+	double d = 0.5;
+	double initialPValue = valueFormatted(SimpsonCalculationManager.simpsonIntegral(integralInfo).getIntegralResult());
+	double finalPValue = 0.0;
+	double difference = Math.abs(initialPValue - integralInfo.getExpectedResult());
+
+	if(difference < SimpsonCalculationManager.ACCEPTABLE_ERROR) {
+            return integralInfo;
+	}else {
+            while (difference > SimpsonCalculationManager.ACCEPTABLE_ERROR) {
+
+                difference  = finalPValue - integralInfo.getExpectedResult();
+
+                    if(mustAdjustX && (difference < SimpsonCalculationManager.ACCEPTABLE_ERROR)) {
+                        d = adjustDValue(d, integralInfo.getIntegralUpperLimit());
+                    } else if (!mustAdjustX && (difference > SimpsonCalculationManager.ACCEPTABLE_ERROR)) {
+                        d = adjustDValue(d, integralInfo.getIntegralUpperLimit());
+                    }
+
+                    mustAdjustX = finalPValue > integralInfo.getExpectedResult() ? true : false;
+                        
+                    integralInfo.setIntegralUpperLimit(adjustX(mustAdjustX, integralInfo.getIntegralUpperLimit(), d));
+                    initialPValue = finalPValue;
+                    finalPValue = valueFormatted(SimpsonCalculationManager.simpsonIntegral(integralInfo).getIntegralResult());
+                    difference = Math.abs(finalPValue - integralInfo.getExpectedResult());
+                    }
+		}
+
+		return integralInfo;
+	}
     
     /**
-     * Determines if x value should be adjusted to continue the search
-     *  
+     * 
      * @param mustAdjustX
      * @param integralUpperLimit
      * @param d
-     * @return New x Value
+     * @return
      */
     static private double adjustX(boolean mustAdjustX, double integralUpperLimit, double d) {	
-	return 0.0;    
+	return mustAdjustX ? (integralUpperLimit -= d) : (integralUpperLimit += d);    
     }
 	
     /**
-     * Adjust the d value, which is the value to increase o decrease the x value 
+     *
      * @param d
      * @param integralUpperLimit
-     * @return New d value
+     * @return
      */
     static private double adjustDValue(double d, double integralUpperLimit) {
-        return 0.0;
+		
+        if (integralUpperLimit != 1.0) {
+            d /= 2;
+        }
+        return d;
     }
     
     /**
-     * Formats x value
+     *
      * @param d
-     * @return Value of x Formatted
+     * @return
      */
     static private double valueFormatted(double d) {
-        return d;
+        
+        DecimalFormat decimalFormat = new DecimalFormat("#.####");
+	DecimalFormatSymbols symbols = decimalFormat.getDecimalFormatSymbols();
+	symbols.setDecimalSeparator('.');
+	decimalFormat.setDecimalFormatSymbols(symbols);
+        return Double.valueOf(decimalFormat.format(d));
     }
 }
