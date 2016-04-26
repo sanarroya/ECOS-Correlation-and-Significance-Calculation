@@ -23,21 +23,15 @@ import java.util.logging.Logger;
  */
 public class LoadData {
     
-    public enum DataType {
-        VALUEPAIR,
-        RESULT
-    }
-    
     /**
      *Load data from .txt file into a List of ClassInfo objects
      * 
      * @param fileName
      * @return classInfo list with the information read from the file
      */
-    public static List<Object> loadDataFromFile(String fileName, DataType type) {
+    public static List<CalculationResult> loadDataFromFile(String fileName) {
         
-        List<Object> dataList = new ArrayList<>();
-        
+        List<CalculationResult> dataList = new ArrayList<>();
         File archive = new File(fileName);
         try {
             BufferedReader reader = new BufferedReader(new FileReader(fileName));
@@ -45,27 +39,21 @@ public class LoadData {
             while((line = reader.readLine()) != null) {
                 StringTokenizer stringTokenized = new StringTokenizer(line, "\n");
                 if(stringTokenized.hasMoreTokens()) {
-                    switch(type) {
-                        case RESULT:
-                            break;
-                        case VALUEPAIR:
-                            ValuePair valuePair = new ValuePair();
-                            String[] stringsInLine = stringTokenized.nextToken().split(",");
-                            valuePair.setX(Double.parseDouble(stringsInLine[0]));
-                            valuePair.setY(Double.parseDouble(stringsInLine[1]));
-                            dataList.add(valuePair);
-                            break;
-                    }
                     
-                    IntegralInfo integralInfo = new IntegralInfo();
                     String[] stringsInLine = stringTokenized.nextToken().split(",");
-                    integralInfo.setIntegralLowerLimit(Double.parseDouble(stringsInLine[0]));
-                    integralInfo.setIntegralUpperLimit(Double.parseDouble(stringsInLine[1]));
-                    integralInfo.setDegreesOfFreedom(Double.parseDouble(stringsInLine[2]));
-                    integralInfo.setExpectedResult(Double.parseDouble(stringsInLine[3]));
-                    integralInfo.setExpectedUpperLimit(Double.parseDouble(stringsInLine[4]));
-                    integralInfo.setNumberOfSegments(10.0);
-                    dataList.add(integralInfo);
+                    CalculationResult result = new CalculationResult();
+                    result.setExpR(Double.parseDouble(stringsInLine[0]));
+                    result.setExpR2(Double.parseDouble(stringsInLine[1]));
+                    result.setExpSignificance(Double.parseDouble(stringsInLine[2]));
+                    result.setExpB0(Double.parseDouble(stringsInLine[3]));
+                    result.setExpB1(Double.parseDouble(stringsInLine[4]));
+                    result.setExpYk(Double.parseDouble(stringsInLine[5]));
+                    result.setExpRange(Double.parseDouble(stringsInLine[6]));
+                    result.setExpUPI(Double.parseDouble(stringsInLine[7]));
+                    result.setExpLPI(Double.parseDouble(stringsInLine[8]));
+                    result.setXk(Double.parseDouble(stringsInLine[9]));
+                    result.setValues(LoadData.values(LoadData.getValueFileForResult(fileName)));
+                       
                 }
             }
         } catch (FileNotFoundException ex) {
@@ -76,4 +64,42 @@ public class LoadData {
         return dataList;
     }
     
+    private static List<ValuePair> values(String fileName) {
+        
+        List<ValuePair> valuePairs = new ArrayList<>();
+        File archive = new File(fileName);
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(fileName));
+            String line;
+            while((line = reader.readLine()) != null) {
+                StringTokenizer stringTokenized = new StringTokenizer(line, "\n");
+                if(stringTokenized.hasMoreTokens()) {
+                    String[] stringsInLine = stringTokenized.nextToken().split(",");
+                    ValuePair valuePair = new ValuePair();
+                    valuePair.setX(Double.parseDouble(stringsInLine[0]));
+                    valuePair.setY(Double.parseDouble(stringsInLine[1]));
+                    valuePairs.add(valuePair);
+                }
+            }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(LoadData.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(LoadData.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return valuePairs;   
+    }
+    
+    private static String getValueFileForResult(String resultFileName) {
+        
+        switch (resultFileName) {
+            case "result1.txt":
+                return "dataset1.txt";
+            case "result2.txt":
+                return "dataset2.txt";
+            case "result3.txt":
+                return "dataset3.txt";
+            default:
+                return "dataset4.txt";
+        }
+    }
 }

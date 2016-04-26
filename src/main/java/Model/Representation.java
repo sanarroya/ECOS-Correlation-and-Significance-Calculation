@@ -5,6 +5,8 @@
  */
 package Model;
 
+import java.util.List;
+
 /**
  *
  * @author SantiagoAvila
@@ -16,7 +18,7 @@ public class Representation {
      * @param result to be presented
      * @return String with HTML tags to present a table in the browser
      */
-    static public String htmlRepresentation(CalculationResult result) {
+    static public String htmlRepresentation(List<CalculationResult> results) {
         String htmlRepresentation = "";
         return htmlRepresentation;
     }

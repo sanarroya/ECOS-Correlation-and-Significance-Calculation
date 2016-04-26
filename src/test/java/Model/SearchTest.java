@@ -40,15 +40,16 @@ public class SearchTest {
     /**
      * Test of xValue method, of class Search.
      */
+    /**
+     * Test of xValue method, of class Search.
+     */
     @Test
     public void testXValue() {
         System.out.println("xValue");
-        IntegralInfo integralInfo = null;
-        IntegralInfo expResult = null;
-        IntegralInfo result = Search.xValue(integralInfo);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        IntegralInfo integralInfo = new IntegralInfo(8.0, 10.0, 0.0, 0.0, 0.35);
+        double expResult = 1.10791015625;
+        double result = Search.xValue(integralInfo).getIntegralUpperLimit();
+        assertEquals(expResult, result, 0.2);
     }
     
 }

@@ -15,10 +15,16 @@ import java.util.List;
 public class CalculationResult {
     
     private double xk;
-    private double regressionB1;
-    private double correlationR;
-    private double n;
     private List<ValuePair> values;
+    private double expR;
+    private double expR2;
+    private double expSignificance;
+    private double expB0;
+    private double expB1;
+    private double expYk;
+    private double expRange;
+    private double expUPI;
+    private double expLPI;
     
     /**
      * Empty constructor of the class
@@ -49,17 +55,154 @@ public class CalculationResult {
      * @return RegressionB1 getter
      */
     public double getRegressionB1() {
-        return regressionB1;
+        return StatisticCalculationManager.calculateRegressionB1(values);
     }
 
     /**
-     * RegressionB1 attribute setter
-     * @param regressionB1
+     *
+     * @return
      */
-    public void setRegressionB1(double regressionB1) {
-        this.regressionB1 = regressionB1;
+    public double getExpR() {
+        return expR;
     }
 
+    /**
+     *
+     * @param expR
+     */
+    public void setExpR(double expR) {
+        this.expR = expR;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public double getExpR2() {
+        return expR2;
+    }
+
+    /**
+     *
+     * @param expR2
+     */
+    public void setExpR2(double expR2) {
+        this.expR2 = expR2;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public double getExpSignificance() {
+        return expSignificance;
+    }
+
+    /**
+     *
+     * @param expSignificance
+     */
+    public void setExpSignificance(double expSignificance) {
+        this.expSignificance = expSignificance;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public double getExpB0() {
+        return expB0;
+    }
+
+    /**
+     *
+     * @param expB0
+     */
+    public void setExpB0(double expB0) {
+        this.expB0 = expB0;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public double getExpB1() {
+        return expB1;
+    }
+
+    /**
+     *
+     * @param expB1
+     */
+    public void setExpB1(double expB1) {
+        this.expB1 = expB1;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public double getExpYk() {
+        return expYk;
+    }
+
+    /**
+     *
+     * @param expYk
+     */
+    public void setExpYk(double expYk) {
+        this.expYk = expYk;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public double getExpRange() {
+        return expRange;
+    }
+
+    /**
+     *
+     * @param expRange
+     */
+    public void setExpRange(double expRange) {
+        this.expRange = expRange;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public double getExpUPI() {
+        return expUPI;
+    }
+
+    /**
+     *
+     * @param expUPI
+     */
+    public void setExpUPI(double expUPI) {
+        this.expUPI = expUPI;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public double getExpLPI() {
+        return expLPI;
+    }
+
+    /**
+     *
+     * @param expLPI
+     */
+    public void setExpLPI(double expLPI) {
+        this.expLPI = expLPI;
+    }
+
+    
     /**
      *X Average  attribute getter
      * @return X Average value
@@ -94,15 +237,7 @@ public class CalculationResult {
      * @return CorrelationR value
      */
     public double getCorrelationR() {
-        return correlationR;
-    }
-
-    /**
-     *CorrelationR attribute setter
-     * @param correlationR
-     */
-    public void setCorrelationR(double correlationR) {
-        this.correlationR = correlationR;
+        return StatisticCalculationManager.calculateCorrelationCoefficient(values);
     }
     
     /**
@@ -110,15 +245,7 @@ public class CalculationResult {
      * @return N value
      */
     public double getN() {
-        return n;
-    }
-
-    /**
-     * N attribute setter
-     * @param n
-     */
-    public void setN(double n) {
-        this.n = n;
+        return (double)values.size();
     }
     
     /**
@@ -131,7 +258,7 @@ public class CalculationResult {
 
     /**
      * N attribute setter
-     * @param n
+     * @param values
      */
     public void setValues(List<ValuePair> values) {
         this.values = values;
@@ -142,7 +269,7 @@ public class CalculationResult {
      * @return CorrelationSquareR value
      */
     public double getCorrelationSquareR() {
-        return this.correlationR * this.correlationR;
+        return getCorrelationR() * getCorrelationR();
     }
     
     /**
@@ -150,7 +277,7 @@ public class CalculationResult {
      * @return RegressionB0 value
      */
     public double getRegressionB0() {
-        return this.getYAverage() - (this.getXAverage() * this.regressionB1);
+        return this.getYAverage() - (this.getXAverage() * getRegressionB1());
     }
     
     /**
@@ -158,24 +285,32 @@ public class CalculationResult {
      * @return YK value
      */
     public double getYK() {
-        return this.getRegressionB0() + (this.regressionB1 * xk);
+        return this.getRegressionB0() + (getRegressionB1() * xk);
     }
     
+    /**
+     *
+     * @return
+     */
     public double getCorrelationSignificance() {
         
         double correlationSignificance = 0.0;
         double integralUpperlimit = calculateIntegralUpperLimit();
 
-        IntegralInfo integralInfo = new IntegralInfo(this.n - 2.0, 10.0, 0.0, integralUpperlimit, 0.0);
+        IntegralInfo integralInfo = new IntegralInfo(this.getN() - 2.0, 10.0, 0.0, integralUpperlimit, 0.0);
         integralInfo = SimpsonCalculationManager.simpsonIntegral(integralInfo);
         correlationSignificance = 1 - (2 * integralInfo.getIntegralResult());
 
         return correlationSignificance;
     }
     
+    /**
+     *
+     * @return
+     */
     public double getRange() {
         
-        IntegralInfo integralInfo = new IntegralInfo(this.n - 2.0, 10.0, 0.0, 0.5, 0.35);
+        IntegralInfo integralInfo = new IntegralInfo(this.getN() - 2.0, 10.0, 0.0, 0.5, 0.35);
         
         integralInfo = Search.xValue(integralInfo);
         
@@ -184,17 +319,25 @@ public class CalculationResult {
         return xValue * standardDeviation * rangeThirdTerm();
     }
     
+    /**
+     *
+     * @return
+     */
     public double getUPI() {
         return this.getYK() + this.getRange();
     }
     
+    /**
+     *
+     * @return
+     */
     public double getLPI() {
         return this.getYK() - this.getRange();
     }
     
     private double calculateIntegralUpperLimit() {
         
-        double numerator = Math.abs(this.correlationR) * Math.sqrt(this.n - 2.0);
+        double numerator = Math.abs(this.getCorrelationR()) * Math.sqrt(this.getN() - 2.0);
         double enumarator = Math.sqrt(1 - this.getCorrelationSquareR());
         
         return numerator / enumarator;
@@ -203,7 +346,6 @@ public class CalculationResult {
     private double rangeThirdTerm() {
         
         double rangeThirdTerm = 1 + (1 / (double) values.size());
-        System.out.println("RANGE THIRD TERM " + this.getXAverage());
         double numerator = Math.pow((xk - this.getXAverage()), 2.0);
         double enumerator = 0.0;
         
