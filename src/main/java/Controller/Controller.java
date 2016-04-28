@@ -24,7 +24,7 @@ public class Controller {
      * @param fileName File to read the data from
      * @return List of values to be integrated
      */
-    public List<CalculationResult> loadClassInfo(String fileName) {
+    public CalculationResult loadClassInfo(String fileName) {
         return LoadData.loadDataFromFile(fileName);
     }
     

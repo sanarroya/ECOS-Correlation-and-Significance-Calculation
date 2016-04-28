@@ -43,12 +43,14 @@ public class SimpsonCalculationManagerTest {
     @Test
     public void testSimpsonIntegral() {
         System.out.println("simpsonIntegral");
-        IntegralInfo integralInfo = null;
-        IntegralInfo expResult = null;
-        IntegralInfo result = SimpsonCalculationManager.simpsonIntegral(integralInfo);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        IntegralInfo integralInfo = new IntegralInfo();
+        integralInfo.setIntegralLowerLimit(0.0);
+        integralInfo.setIntegralUpperLimit(1.1);
+        integralInfo.setDegreesOfFreedom(9);
+        integralInfo.setNumberOfSegments(10.0);
+        double expResult = 0.35006;
+        IntegralInfo resultIntegral = SimpsonCalculationManager.simpsonIntegral(integralInfo);
+        double result = resultIntegral.getIntegralResult();
+        assertEquals(expResult, result, 0.2);
     }
-    
 }

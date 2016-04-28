@@ -108,12 +108,21 @@ public class StatisticCalculationManagerTest {
     @Test
     public void testStandardDeviation() {
         System.out.println("standardDeviation");
-        List<ValuePair> values = null;
-        double expResult = 0.0;
+        List<ValuePair> values = new ArrayList<>();
+        values.add(new ValuePair(130, 186));
+        values.add(new ValuePair(650, 699));
+        values.add(new ValuePair(99, 132));
+        values.add(new ValuePair(150, 272));
+        values.add(new ValuePair(128, 291));
+        values.add(new ValuePair(302, 331));
+        values.add(new ValuePair(95, 199));
+        values.add(new ValuePair(945, 1890));
+        values.add(new ValuePair(368, 788));
+        values.add(new ValuePair(961, 1601));
+        double expResult = 197.8955;
         double result = StatisticCalculationManager.standardDeviation(values);
-        assertEquals(expResult, result, 0.0);
+        assertEquals(expResult, result, 0.2);
         // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
     
 }

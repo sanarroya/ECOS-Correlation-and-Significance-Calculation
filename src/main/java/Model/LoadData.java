@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author SantiagoAvila
+ * @author 
  */
 public class LoadData {
     
@@ -29,9 +29,9 @@ public class LoadData {
      * @param fileName
      * @return classInfo list with the information read from the file
      */
-    public static List<CalculationResult> loadDataFromFile(String fileName) {
+    public static CalculationResult loadDataFromFile(String fileName) {
         
-        List<CalculationResult> dataList = new ArrayList<>();
+        CalculationResult result = new CalculationResult();
         File archive = new File(fileName);
         try {
             BufferedReader reader = new BufferedReader(new FileReader(fileName));
@@ -41,7 +41,7 @@ public class LoadData {
                 if(stringTokenized.hasMoreTokens()) {
                     
                     String[] stringsInLine = stringTokenized.nextToken().split(",");
-                    CalculationResult result = new CalculationResult();
+                    
                     result.setExpR(Double.parseDouble(stringsInLine[0]));
                     result.setExpR2(Double.parseDouble(stringsInLine[1]));
                     result.setExpSignificance(Double.parseDouble(stringsInLine[2]));
@@ -53,7 +53,7 @@ public class LoadData {
                     result.setExpLPI(Double.parseDouble(stringsInLine[8]));
                     result.setXk(Double.parseDouble(stringsInLine[9]));
                     result.setValues(LoadData.values(LoadData.getValueFileForResult(fileName)));
-                       
+                    
                 }
             }
         } catch (FileNotFoundException ex) {
@@ -61,7 +61,7 @@ public class LoadData {
         } catch (IOException ex) {
             Logger.getLogger(LoadData.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return dataList;
+        return result;
     }
     
     private static List<ValuePair> values(String fileName) {
@@ -93,13 +93,13 @@ public class LoadData {
         
         switch (resultFileName) {
             case "result1.txt":
-                return "dataset1.txt";
+                return "valueset1.txt";
             case "result2.txt":
-                return "dataset2.txt";
+                return "valueset2.txt";
             case "result3.txt":
-                return "dataset3.txt";
+                return "valueset3.txt";
             default:
-                return "dataset4.txt";
+                return "valueset4.txt";
         }
     }
 }
