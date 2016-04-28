@@ -50,10 +50,11 @@ public class Main {
         }
         
         String htmlRepresentation = "";
-        int count = 1;
-        for(CalculationResult result : data) {
-            
-            htmlRepresentation += String.format("<h3>Test %d</h3><br><table border=\"1\">", count);
+   
+//        for(CalculationResult result : data) {
+//          
+            CalculationResult result = data.get(2);
+            htmlRepresentation += String.format("<h3>Test %d</h3><br><table border=\"1\">", 3);
             htmlRepresentation += String.format("<tr align=\"center\"><td>Parameter</td><td>Expected Value</td><td>Actual Value</td></tr>");
             htmlRepresentation += String.format("<tr align=\"center\"><td>r</td><td>%f</td><td>%f</td></tr>", result.getExpR(), result.getCorrelationR());
             htmlRepresentation += String.format("<tr align=\"center\"><td>r^2</td><td>%f</td><td>%f</td></tr>", result.getExpR2(), result.getCorrelationSquareR());
@@ -65,10 +66,10 @@ public class Main {
             htmlRepresentation += String.format("<tr align=\"center\"><td>UPI</td><td>%f</td><td>%f</td></tr>", result.getExpUPI(), result.getUPI());
             htmlRepresentation += String.format("<tr align=\"center\"><td>LPI</td><td>%f</td><td>%f</td></tr>", result.getExpLPI(), result.getLPI());
             htmlRepresentation += String.format("</table>");
-            count++;
-        }
+//            count++;
+//        }
         
-        return data.get(0).getExpR();
+        return htmlRepresentation;
     });
     
     
