@@ -23,14 +23,18 @@ Make sure you have Java and Maven installed and run the following command:
 $ cd ECOS-Correlation-and-Significance-Calculation
 $ mvn test
 ```
-#TODO FIX THE FOLLOWING URLs
 ## Heroku
 
 To access the application on heroku go to the following link:
 
-- [Simpson numerical integration value search](https://salty-meadow-44541.herokuapp.com/simpsonIntegralXValue)
+- [Simpson numerical integration value search](https://pacific-basin-65705.herokuapp.com/calculations)
 
 ## Javadoc
 
 To access the application javadoc go to the following link:
-- [Simpson numerical integration value search javadoc](http://sanarroya.github.io/ECOS-Simpson-Numerical-Integration-Value-Search/target/site/apidocs/index.html)
+- [Correlation and Significance Calculation javadoc](http://sanarroya.github.io/ECOS-Correlation-and-Significance-Calculation/target/site/apidocs/index.html)
+- 
+## Test cases
+
+To access the test cases go to the following link
+-[Test cases](https://github.com/sanarroya/ECOS-Correlation-and-Significance-Calculation/blob/master/Casos%20de%20prueba.png)
